@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For You ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="heartCanvas" width="400" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById("heartCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Replicate Turtle movement coordinates
+    let x = 200, y = 240;
+    let angle = 0; // degrees, 0 is right
+    const points = [{x, y}];
+
+    function left(deg) { angle -= deg; }
+    function right(deg) { angle += deg; }
+    function forward(dist) {
+      const rad = (angle * Math.PI) / 180;
+      x += dist * Math.cos(rad);
+      y += dist * Math.sin(rad);
+      points.push({x, y});
+    }
+
+    // Exact path from your Python script
+    left(140);
+    forward(113);
+    for (let i = 0; i < 200; i++) { right(1); forward(1); }
+    left(120);
+    for (let i = 0; i < 200; i++) { right(1); forward(1); }
+    forward(112);
+
+    let step = 1;
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < step; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.strokeStyle = "red";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      if (step < points.length) {
+        step += 4; // Animation speed
+        requestAnimationFrame(animate);
+      } else {
+        // Fill heart & show text
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.fillStyle = "black";
+        ctx.font = "bold 22px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("I Love You", 200, 290);
+      }
+    }
+    animate();
+  </script>
+</body>
+</html>
